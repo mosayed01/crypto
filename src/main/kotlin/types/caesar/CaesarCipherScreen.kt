@@ -4,19 +4,21 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import types.caesar.brut_force.CaesarBrutForceScreen
 
-class CaesarCipherScreen : Screen {
+object CaesarCipherScreen : Screen {
+    private fun readResolve(): Any = CaesarCipherScreen
 
     @Preview
     @Composable
@@ -24,9 +26,24 @@ class CaesarCipherScreen : Screen {
         val screenModel = rememberScreenModel { CaesarCipherScreenModel() }
         val state by screenModel.state.collectAsState()
         val scaffoldState = rememberScaffoldState()
+        val navigator = LocalNavigator.currentOrThrow
+        val coroutineScope = rememberCoroutineScope()
 
         Scaffold(
             scaffoldState = scaffoldState,
+            topBar = {
+                TopAppBar(
+                    backgroundColor = MaterialTheme.colors.background,
+                    title = {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text("Caesar Cipher", style = MaterialTheme.typography.h6)
+                        }
+                    }
+                )
+            },
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -34,15 +51,16 @@ class CaesarCipherScreen : Screen {
                 verticalArrangement = Arrangement.Center,
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(0.75f),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    modifier = Modifier.fillMaxWidth(0.8f),
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     OutlinedTextField(
                         value = state.text,
                         onValueChange = screenModel::onTextChange,
                         label = {
                             Text("text")
-                        }
+                        },
+                        modifier = Modifier.padding(end = 8.dp)
                     )
                     OutlinedTextField(
                         value = state.shift,
@@ -52,7 +70,8 @@ class CaesarCipherScreen : Screen {
                         },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number
-                        )
+                        ),
+                        modifier = Modifier.padding(start = 8.dp)
                     )
 
                 }
@@ -71,14 +90,27 @@ class CaesarCipherScreen : Screen {
                         Text("Decode")
                     }
                 }
+                Button(
+                    onClick = {
+                        navigator.push(CaesarBrutForceScreen)
+                    },
+                    modifier = Modifier.padding(top = 42.dp)
+                ) {
+                    Text("Brute Force Page")
+                }
             }
         }
 
-        LaunchedEffect(Unit) {
-            screenModel.channel.collectLatest { event ->
-                when (event) {
-                    is CaesarEvent.Error -> scaffoldState.snackbarHostState.showSnackbar(event.message)
+        DisposableEffect(Unit) {
+            val job = coroutineScope.launch {
+                screenModel.channel.collectLatest { event ->
+                    when (event) {
+                        is CaesarEvent.Error -> scaffoldState.snackbarHostState.showSnackbar(event.message)
+                    }
                 }
+            }
+            onDispose {
+                job.cancel()
             }
         }
     }

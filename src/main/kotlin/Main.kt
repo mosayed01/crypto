@@ -7,7 +7,7 @@ import types.caesar.CaesarCipherScreen
 fun main() = application {
     Window(onCloseRequest = ::exitApplication, title = "Crypto") {
         MaterialTheme {
-            Navigator(CaesarCipherScreen())
+            Navigator(CaesarCipherScreen)
         }
     }
 }

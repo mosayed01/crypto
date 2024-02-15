@@ -66,7 +66,7 @@ class BrutForceScreenModel : StateScreenModel<BrutForceState>(BrutForceState()) 
                                 {
                                     "parts": [
                                         {
-                                            "text": "just aswer true or false if the word (${word}) has meaning"
+                                            "text": "just answer true or false if the word (${word}) has meaning focus in letters only"
                                         }
                                     ]
                                 }

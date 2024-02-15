@@ -13,9 +13,11 @@ import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import types.caesar.brut_force.CaesarBrutForceScreen
+import java.io.File
 
 object CaesarCipherScreen : Screen {
     private fun readResolve(): Any = CaesarCipherScreen
@@ -28,6 +30,7 @@ object CaesarCipherScreen : Screen {
         val scaffoldState = rememberScaffoldState()
         val navigator = LocalNavigator.currentOrThrow
         val coroutineScope = rememberCoroutineScope()
+        var showFilePicker by remember { mutableStateOf(false) }
 
         Scaffold(
             scaffoldState = scaffoldState,
@@ -89,6 +92,13 @@ object CaesarCipherScreen : Screen {
                     ) {
                         Text("Decode")
                     }
+                    Button(
+                        onClick = {
+                            showFilePicker = true
+                        }
+                    ) {
+                        Text("Peck File")
+                    }
                 }
                 Button(
                     onClick = {
@@ -98,6 +108,13 @@ object CaesarCipherScreen : Screen {
                 ) {
                     Text("Brute Force Page")
                 }
+            }
+        }
+
+        FilePicker(show = showFilePicker, fileExtensions = listOf("txt")) { platformFile ->
+            showFilePicker = false
+            (platformFile?.platformFile as File?)?.readText()?.let {
+                screenModel.onTextChange(it)
             }
         }
 

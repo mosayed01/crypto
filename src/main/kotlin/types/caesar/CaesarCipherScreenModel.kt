@@ -18,6 +18,12 @@ class CaesarCipherScreenModel : StateScreenModel<CaesarState>(CaesarState()) {
 
     fun onShiftChange(shift: String) {
         if (shift.toIntOrNull() != null || shift.isEmpty()) {
+            if (shift.isNotEmpty() && (shift.toInt() < 0 || shift.toInt() > 25)) {
+                screenModelScope.launch {
+                    _channel.send(CaesarEvent.Error("key must be in range 0..25"))
+                }
+                return
+            }
             mutableState.update { it.copy(shift = shift) }
         }
     }

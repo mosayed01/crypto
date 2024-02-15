@@ -50,12 +50,11 @@ object CaesarCipherScreen : Screen {
             },
         ) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxSize().padding(top = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth(0.8f),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     OutlinedTextField(
@@ -64,7 +63,7 @@ object CaesarCipherScreen : Screen {
                         label = {
                             Text("text")
                         },
-                        modifier = Modifier.padding(end = 8.dp)
+                        modifier = Modifier.padding(end = 8.dp),
                     )
                     OutlinedTextField(
                         value = state.shift,
@@ -103,9 +102,15 @@ object CaesarCipherScreen : Screen {
                 }
                 Button(
                     onClick = {
-                        FileWriter(File("saved.txt"), true).use {
-                            it.append("${state.text} with key: ${state.shift.ifEmpty { "5" }}\n")
-                            it.close()
+                        if (state.text.isNotEmpty()) {
+                            FileWriter(File("saved.txt"), true).use {
+                                it.append("${state.text} with key: ${state.shift.ifEmpty { "5" }}\n")
+                                it.close()
+                            }
+                        } else {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("text cannot be empty")
+                            }
                         }
                     }
                 ) {
@@ -115,7 +120,7 @@ object CaesarCipherScreen : Screen {
                     onClick = {
                         navigator.push(CaesarBrutForceScreen)
                     },
-                    modifier = Modifier.padding(top = 42.dp)
+                    modifier = Modifier.padding(top = 24.dp)
                 ) {
                     Text("Brute Force Page")
                 }

@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import types.caesar.brut_force.CaesarBrutForceScreen
 import java.io.File
+import java.io.FileWriter
 
 object CaesarCipherScreen : Screen {
     private fun readResolve(): Any = CaesarCipherScreen
@@ -99,6 +100,16 @@ object CaesarCipherScreen : Screen {
                     }
                 ) {
                     Text("Peck from text file")
+                }
+                Button(
+                    onClick = {
+                        FileWriter(File("saved.txt"), true).use {
+                            it.append("${state.text} with key: ${state.shift.ifEmpty { "5" }}\n")
+                            it.close()
+                        }
+                    }
+                ) {
+                    Text("Save")
                 }
                 Button(
                     onClick = {

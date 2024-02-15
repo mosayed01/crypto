@@ -92,13 +92,13 @@ object CaesarCipherScreen : Screen {
                     ) {
                         Text("Decode")
                     }
-                    Button(
-                        onClick = {
-                            showFilePicker = true
-                        }
-                    ) {
-                        Text("Peck File")
+                }
+                Button(
+                    onClick = {
+                        showFilePicker = true
                     }
+                ) {
+                    Text("Peck from text file")
                 }
                 Button(
                     onClick = {

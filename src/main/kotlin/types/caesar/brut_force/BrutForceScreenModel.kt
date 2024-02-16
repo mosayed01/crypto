@@ -94,7 +94,7 @@ class BrutForceScreenModel : StateScreenModel<BrutForceState>(BrutForceState()) 
 
     companion object {
         private const val URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyBF3VpRSc4qlSlU5JrxATY6JC1A8T3ZA9s"
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$API_KEY"
     }
 }
 

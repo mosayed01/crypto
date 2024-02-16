@@ -15,6 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import types.caesar.brut_force.dto.GeminiResponse
+import types.caesar.brut_force.key.API_KEY
 import types.caesar.decrypt
 
 class BrutForceScreenModel : StateScreenModel<BrutForceState>(BrutForceState()) {

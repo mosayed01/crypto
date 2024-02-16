@@ -81,13 +81,5 @@ object CaesarBrutForceScreen : Screen {
                 }
             }
         }
-
-//        LaunchedEffect(Unit) {
-//            screenModel.channel.collectLatest { event ->
-//                when (event) {
-//                    is CaesarEvent.Error -> scaffoldState.snackbarHostState.showSnackbar(event.message)
-//                }
-//            }
-//        }
     }
 }

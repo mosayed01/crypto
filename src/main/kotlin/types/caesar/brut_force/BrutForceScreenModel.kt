@@ -66,7 +66,7 @@ class BrutForceScreenModel : StateScreenModel<BrutForceState>(BrutForceState()) 
                                 {
                                     "parts": [
                                         {
-                                            "text": "just answer true or false if the word (${word}) has meaning focus in letters only"
+                                            "text": "just answer true or false if it is meaningful statement (${word}) has meaning focus in letters only"
                                         }
                                     ]
                                 }
@@ -100,7 +100,6 @@ class BrutForceScreenModel : StateScreenModel<BrutForceState>(BrutForceState()) 
 
 data class BrutForceState(
     val encodedText: String = "",
-    val key: Int = 0,
     val possibleDecodedWord: String = "",
     val isLoading: Boolean = false
 )
